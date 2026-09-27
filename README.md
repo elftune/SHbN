@@ -1,7 +1,12 @@
 # Stemを並べて発声開始位置とかBPMとかの調査をなんちゃって支援 (SHbN)
 
+## Notice
+```
+This repository is for personal use only.I do not accept any Issues or Pull Requests.
+```
+
 ## 対象
-Sunoで作ったStemの音声ファイル群の発声開始位置やBPM等を調査したい方へ。
+Sunoで作ったStemの音声ファイル群の発声開始位置やBPM等を調査したい方。
 
 ## プチ詳細
 Sunoの有料プランで曲を作ると楽器やボーカルごとに別れた.mp3ファイル群をダウンロードできます。Stem(ステム)と呼ばれるファイルです。じゃあBMSのバックコーラスに使おうじゃないか！と思ったのですが、BPMはわからないし再生開始位置もデータの最初からではない。
