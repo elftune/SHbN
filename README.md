@@ -6,7 +6,7 @@ Sunoとかで作ったStemの音声ファイル群の、発声開始位置やBPM
 ## 開発環境
 バイナリでは配布しませんので各自環境をそろえてビルドしてください。
 
-- Windows 11 + 4Kディスプレイ (2560x1400でもいけると思います。)
+- Windows 11 + 4Kディスプレイ (2560x1440でもいけると思います。)
 - [Visual Studio 2026](https://visualstudio.microsoft.com/ja/vs/) (VSCode + C# Dev Kitでもいけると思いますが後述の理由によりVisual Studio 2026を推奨します。)
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
