@@ -449,7 +449,7 @@
             Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Stemを並べて発声開始位置とかBPMとかの調査をなんちゃって支援";
+            Text = "SHbN - Stemを並べて発声開始位置とかBPMとかの調査をなんちゃって支援";
             MouseClick += Form1_MouseClick;
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
