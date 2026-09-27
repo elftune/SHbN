@@ -209,9 +209,7 @@ namespace DxLibCSTest
             DX.SetWaitVSyncFlag(DX.FALSE);
             DX.SetWindowSizeExtendRate(1.0);
             ClientSize = new Size(xsize, ysize);
-
-            //if (this.Height > 1400)
-            //    this.Height = 1400;
+            this.Location = new Point((Screen.PrimaryScreen.Bounds.Width - this.Width) / 2, (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2);
 
             if (DX.DxLib_Init() == -1)
             {
