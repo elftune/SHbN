@@ -25,6 +25,7 @@ namespace DxLibCSTest
         DX.VERTEX2D[] vertices = new DX.VERTEX2D[nWAVE_SIZE];
 
         int nPushedL = -100, nPushedR = -100;
+        int xsize = 1980, ysize = 1300;
 
         class UserData
         {
@@ -202,12 +203,15 @@ namespace DxLibCSTest
             DX.ChangeWindowMode(DX.TRUE);      // ウィンドウモード
             DX.SetUserWindow(this.Handle);    // 描画先をこのFormのハンドルに指定(Init以後は変更不可)
             DX.SetBackgroundColor(64, 64, 64);
+            DX.SetGraphMode(xsize, ysize, 32);
             DX.SetEnableXAudioFlag(DX.FALSE); // XAudio2を無効にしてDirectSoundにする（再生位置取得とかはDSの方がいいらしい？）
             DX.SetAlwaysRunFlag(DX.TRUE); // ウィンドウが非アクティブでも描画を続ける
             DX.SetWaitVSyncFlag(DX.FALSE);
+            DX.SetWindowSizeExtendRate(1.0);
+            ClientSize = new Size(xsize, ysize);
 
-            if (this.Height > 1400)
-                this.Height = 1400;
+            //if (this.Height > 1400)
+            //    this.Height = 1400;
 
             if (DX.DxLib_Init() == -1)
             {
@@ -428,6 +432,7 @@ namespace DxLibCSTest
                                 vertices[v].rhw = 1.0f;
                                 vertices[v].dif = color;
                                 v++;
+                                if (v >= nWAVE_SIZE) break;
 
                                 prevXL = x;
                                 prevYL = yL;
