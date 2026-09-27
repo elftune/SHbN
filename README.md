@@ -17,7 +17,7 @@ Sunoの有料プランで曲を作ると楽器やボーカルごとに別れた.
 
 - Windows 11 + 4Kディスプレイ (2560x1440でもいけると思います。)
 - [Visual Studio 2026](https://visualstudio.microsoft.com/ja/vs/) (VSCode + C# Dev Kitでもいけると思いますが後述の理由によりVisual Studio 2026を推奨します。)
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/ja-jp/download/dotnet/10.0)
 
 ## 前提条件
 - ウィンドウ内のレイアウトですが4K+175%拡大表示に合わせていますので各自調整ください（その意味でもVSCodeよりVisual Studio 2026の方がおすすめです。）
