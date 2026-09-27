@@ -1,0 +1,15 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="x64" />
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/ソリューション項目/">
+    <File Path="memo.md" />
+  </Folder>
+  <Project Path="DxLibCSTest.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
