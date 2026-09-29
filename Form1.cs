@@ -12,11 +12,12 @@ namespace DxLibCSTest
     {
         private bool isRunning = false;
         int[] nSFSound, nSound;
-        string[] sFilenames = new string[nSOUND_QUANTITY];
+        const int MAX_SOUND_QUANTITY = 7;
+        string[] sFilenames = new string[MAX_SOUND_QUANTITY];
         long total_samples = 0; // 読み込んだサンプルの数
         long currentSamplePos = 0; /// 現在の位置（サンプル単位）
         int channels = 0, bitsPerSample = 0, samplesPerSec = 0; // 2ch, 16bit, 48000hz/44100hz
-        const int nSOUND_QUANTITY = 7; // 7個まで
+        int nSOUND_QUANTITY = MAX_SOUND_QUANTITY; // 7個まで
 
         double dZoomRate = 2.0; // 1.0で1秒分の波形を描画する。2.0で2秒分の波形を描画する。
         const int nWAVE_SIZE = 3000;
@@ -36,7 +37,7 @@ namespace DxLibCSTest
             public int nMAX_MIN { get; set; } // 1小節の最大値-最小値
             public int nAVE_NUM { get; set; } // 平均個数
             public string sWaveFolder { get; set; } // 音声ファイルのフォルダ
-            public string[] sSoundFile { get; set; } // 音声ファイル名
+            public string[] asSoundFile { get; set; } // 音声ファイル名
         }
         UserData userData = new UserData();
 
@@ -69,6 +70,7 @@ namespace DxLibCSTest
             textBoxBunbo.Text = userData.nBunbo.ToString();
             textBoxStartBar.Text = userData.nStartBar.ToString();
             textBoxBPM.Text = userData.dBPM.ToString("F2");
+            nSOUND_QUANTITY = MAX_SOUND_QUANTITY;
 
 
             for (int i = 0; i < nSOUND_QUANTITY; i++)
@@ -82,7 +84,7 @@ namespace DxLibCSTest
                 nSFSound[i] = -1;
                 nSound[i] = -1;
             }
-            userData.sSoundFile = null;
+            userData.asSoundFile = null;
 
             // ファイル選択ダイアログを表示して、音声ファイルを選択する
             // OpenFileDialogを作成
@@ -109,22 +111,20 @@ namespace DxLibCSTest
                 return false;
             }
 
+            nSOUND_QUANTITY = openFileDialog.FileNames.Length;
             MessageBox.Show("音声ファイルをロード中します。画面が反応しませんが、少々お待ちください。（MP3形式がある場合、OGG形式の数倍時間がかかります）", "情報", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // ソフトウエアで扱う波形データハンドルのサンプル数を取得する。バイト数ではなく、サンプルの数
             // 1サンプルは左右2チャンネルで16bit（2byte）なので、1サンプルは4byteになる
             // サンプル数(total_samples)を44100(samplesPerSec)で割れば、曲の秒数が求められる。12857472 / 44100 = 291.45秒（約4分51秒）
-            nSFSound = new int[nSOUND_QUANTITY];
-            nSound = new int[nSOUND_QUANTITY];
-
             userData.sWaveFolder = Path.GetDirectoryName(openFileDialog.FileNames[0]);
-            userData.sSoundFile = null;
+            userData.asSoundFile = null;
             if (openFileDialog.FileNames.Length > 0)
             {
-                userData.sSoundFile = new string[nSOUND_QUANTITY];
+                userData.asSoundFile = new string[nSOUND_QUANTITY];
                 for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
-                    userData.sSoundFile[i] = openFileDialog.FileNames[i];
+                    userData.asSoundFile[i] = openFileDialog.FileNames[i];
                 }
             }
 
@@ -138,8 +138,8 @@ namespace DxLibCSTest
             int sr = -1;
             for (int i = 0; i < nSOUND_QUANTITY; i++)
             {
-                nSFSound[i] = DX.LoadSoftSound(userData.sSoundFile[i]);
-                sFilenames[i] = Path.GetFileName(userData.sSoundFile[i]);
+                nSFSound[i] = DX.LoadSoftSound(userData.asSoundFile[i]);
+                sFilenames[i] = Path.GetFileName(userData.asSoundFile[i]);
 
                 if (nSFSound[i] == -1)
                 {
@@ -241,9 +241,10 @@ namespace DxLibCSTest
                 userData.nMAX_MIN = 5000;
                 userData.nAVE_NUM = 64;
                 userData.sWaveFolder = sFolder;
-                userData.sSoundFile = null;
+                userData.asSoundFile = null;
             }
 
+            nSOUND_QUANTITY = userData.asSoundFile != null ? userData.asSoundFile.Length : 0;
             textBoxBPM.Text = userData.dBPM.ToString("F2");
             textBoxBunshi.Text = userData.nBunshi.ToString();
             textBoxBunbo.Text = userData.nBunbo.ToString();
@@ -251,9 +252,9 @@ namespace DxLibCSTest
             textBoxMAX_MIN.Text = userData.nMAX_MIN.ToString();
             textBoxAVE_NUM.Text = userData.nAVE_NUM.ToString();
 
-            nSFSound = new int[nSOUND_QUANTITY];
-            nSound = new int[nSOUND_QUANTITY];
-            for (int i = 0; i < nSOUND_QUANTITY; i++)
+            nSFSound = new int[MAX_SOUND_QUANTITY];
+            nSound = new int[MAX_SOUND_QUANTITY];
+            for (int i = 0; i < MAX_SOUND_QUANTITY; i++)
             {
                 nSFSound[i] = -1;
                 nSound[i] = -1;
@@ -262,9 +263,9 @@ namespace DxLibCSTest
             DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
             isRunning = false;
-            if (userData.sSoundFile != null)
+            if (userData.asSoundFile != null)
             {
-                if (userData.sSoundFile.Length > 0)
+                if (userData.asSoundFile.Length > 0)
                     WavesLoad_Sub();
             }
 
@@ -622,6 +623,7 @@ namespace DxLibCSTest
         private void checkBoxMute0_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 0) return;
             if (checkBoxMute0.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[0]);
             else
@@ -631,6 +633,7 @@ namespace DxLibCSTest
         private void checkBoxMute1_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 1) return;
             if (checkBoxMute1.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[1]);
             else
@@ -640,6 +643,7 @@ namespace DxLibCSTest
         private void checkBoxMute2_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 2) return;
             if (checkBoxMute2.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[2]);
             else
@@ -649,6 +653,7 @@ namespace DxLibCSTest
         private void checkBoxMute3_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 3) return;
             if (checkBoxMute3.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[3]);
             else
@@ -658,6 +663,7 @@ namespace DxLibCSTest
         private void checkBoxMute4_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 4) return;
             if (checkBoxMute4.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[4]);
             else
@@ -667,6 +673,7 @@ namespace DxLibCSTest
         private void checkBoxMute5_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 5) return;
             if (checkBoxMute5.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[5]);
             else
@@ -676,6 +683,7 @@ namespace DxLibCSTest
         private void checkBoxMute6_CheckedChanged(object sender, EventArgs e)
         {
             if (isRunning == false) return;
+            if (nSOUND_QUANTITY <= 6) return;
             if (checkBoxMute6.Checked)
                 DX.ChangeVolumeSoundMem(0, nSound[6]);
             else
@@ -782,7 +790,7 @@ namespace DxLibCSTest
             lines.Add("");
             for (int i = 0; i < nSOUND_QUANTITY; i++)
             {
-                string sFile = Path.GetFileName(userData.sSoundFile[i]);
+                string sFile = Path.GetFileName(userData.asSoundFile[i]);
                 // sFileの拡張子を".wav"に変更
                 sFile = Path.ChangeExtension(sFile, ".wav");
                 lines.Add($"#WAV{(i + 2):00} {sFile}"); // WAVは2番から
